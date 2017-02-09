@@ -80,26 +80,27 @@ BTC_fnc_CreateGroupsOfRandomUnits = {
 
 //Move all units in input groups to a random house position getted from a random marker location in radius
 // Usage: [[str groupsName], [str markersName], int radius] call BTC_fnc_MoveUnitsInHouse;
-// Example: [["group1", "group2"], ["marker1", "marker2"], 200] call BTC_fnc_MoveUnitsInHouse;
-BTC_fnc_MoveUnitsInHouse = {
+// Example: [[group1, group2], ["marker1", "marker2"], 200] call BTC_fnc_MoveUnitsInHouse;
+BTC_fnc_MoveUnitsInHouses = {
 	_groups = _this select 0;
 	_markersArray = _this select 1;
 	_radius = _this select 2;
-
+	
 	{
 		_group = _x;
+		[_group] spawn BTC_fnc_FactionDebug;
 		{
 			_unit = _x;
 
 			_randomMarker = _markersArray call BTC_fnc_GetRandomOccurrenceFromArray;
 			_markerPos = getMarkerPos _randomMarker;
-			_housesInRadius = [_markerPos, _radius] call btc_ro_fnc_get_houses;
+			_housesInRadius = [_markerPos, _radius] call BTC_fnc_GetNearestHousesInRadius;
 			_house = _housesInRadius call BTC_fnc_GetRandomOccurrenceFromArray;
 			_housePositions = _house call BTC_fnc_GetUsefulPositionInHouse;
 			_housePos = _housePositions call BTC_fnc_GetRandomOccurrenceFromArray;
 
 			_unit setPos _housePos;
 			doStop _unit;
-		} forEach units _group;
+		} forEach (units _group);
 	} forEach _groups;
-}
+};

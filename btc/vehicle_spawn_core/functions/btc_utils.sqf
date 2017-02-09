@@ -41,7 +41,7 @@ BTC_fnc_IsUnitPresentInGroup = {
 	_isPresent = className _unit in _groupClassNames;
 
 	_isPresent;
-}
+};
 
 BTC_fnc_GetSideFromFaction = {
 	_faction = _this select 0;
@@ -113,4 +113,20 @@ BTC_fnc_GetUsefulPositionInHouse = {
 		_housePositions - [0,0,0];
 	};
 	_housePositions;
-}
+};
+
+BTC_fnc_GetNearestHousesInRadius = {
+	_pos = _this select 0;
+	_radio = _this select 1;
+	
+	_houses = nearestObjects [_pos, ["Building"], _radio];
+	
+	_useful = [];
+	{ 
+		if (format["%1", _x buildingPos 2] != "[0,0,0]" && {damage _x == 0} && {isNil {_x getVariable "btc_house_taken"}}) then
+		{ 
+			_useful set [count _useful, _x]; 
+		}; 
+	} forEach _houses; 
+	_useful;
+};
