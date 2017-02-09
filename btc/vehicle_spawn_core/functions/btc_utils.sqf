@@ -105,3 +105,12 @@ BTC_fnc_FactionDebug = {
 	}
 };
 
+BTC_fnc_GetUsefulPositionInHouse = {
+	_house = _this;
+
+	_housePositions = _house buildingPos - 1;
+	if([0,0,0] in _housePositions) then {
+		_housePositions - [0,0,0];
+	};
+	_housePositions;
+}
