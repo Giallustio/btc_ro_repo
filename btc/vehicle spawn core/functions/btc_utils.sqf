@@ -1,6 +1,6 @@
 //BTC UTILS
 
-BTC_fnc_GetArmoredArrayFromFactionAndType = {
+BTC_fnc_GetVehiclesArrayFromFactionAndType = {
 	private["_faction", "_armoredType"];
 	_faction = _this select 0;
 	_armoredType = _this select 1;
@@ -24,10 +24,24 @@ BTC_fnc_GetArmoredArrayFromFactionAndType = {
 		};
 		
 		if(_arrayFound) exitWith{ true; } ;			
-	} foreach RHS_ARMORED_TYPES_FACTIONS_CLASS_NAMES;
+	} foreach RHS_FACTIONS_VEHICLES_TYPES_CLASS_NAMES;
 	
 	_selArray;
 };
+
+BTC_fnc_IsUnitPresentInGroup = {
+	_group = _this select 0;
+	_unit = _this select 1;
+
+	_groupClassNames = [];
+	{
+		_groupClassNames pushback (className _x);
+	} foreach units _group;
+
+	_isPresent = className _unit in _groupClassNames;
+
+	_isPresent;
+}
 
 BTC_fnc_GetSideFromFaction = {
 	_faction = _this select 0;
