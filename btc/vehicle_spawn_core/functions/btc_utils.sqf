@@ -113,7 +113,7 @@ BTC_fnc_GetHousesInRadius = {
 
 	_useful    = [];
 	{ 
-		if (format["%1", _x buildingPos 2] != "[0,0,0]" && {damage _x == 0} && {isNil {_x getVariable "btc_house_taken"}}) then
+		if (format["%1", _x buildingPos 2] != "[0,0,0]" && {damage _x == 0}}) then
 		{ 
 			_useful set [count _useful, _x]; 
 		}; 
@@ -178,3 +178,4 @@ BTC_fnc_AddUnitsToCargo = {
 		_x moveInCargo _vehicle;
 	} forEach _unitGroup;
 };
+
