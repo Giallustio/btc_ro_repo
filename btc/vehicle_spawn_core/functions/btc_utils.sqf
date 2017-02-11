@@ -105,6 +105,22 @@ BTC_fnc_FactionDebug = {
 	}
 };
 
+BTC_fnc_GetHousesInRadius = {
+	_pos = _this select 0;
+	_radius = _this select 1;
+
+	_buildings = nearestObjects [_pos, ["Building"], _radius];
+
+	_useful    = [];
+	{ 
+		if (format["%1", _x buildingPos 2] != "[0,0,0]" && {damage _x == 0} && {isNil {_x getVariable "btc_house_taken"}}) then
+		{ 
+			_useful set [count _useful, _x]; 
+		}; 
+	} forEach _buildings; 
+	_useful	
+};
+
 BTC_fnc_GetUsefulPositionInHouse = {
 	_house = _this;
 
@@ -113,4 +129,52 @@ BTC_fnc_GetUsefulPositionInHouse = {
 		_housePositions - [0,0,0];
 	};
 	_housePositions;
-}
+};
+
+BTC_fnc_GetPositionFromMakerOrObject = {
+	_obj = _this;
+	_pos = [];
+	
+	if ((typeName _obj) == "object") then { _pos = position _obj } else { _pos = getMarkerPos _obj };
+
+	_pos;
+};
+
+BTC_fnc_AtLastInputEnemiesInRadius = {
+	_enemyLimit = _this select 0;
+	_position = _this select 1;
+	_radius = _this select 2;
+
+	_entitiesInRadius = _position nearEntities [["Man"], _radius];
+	_enemies = _entitiesInRadius select {!isPlayer _x};
+	atLastInputLimit = (count _enemies) > _enemyLimit;
+	atLastInputLimit;
+};
+
+BTC_fnc_MoveGroupToPosition = {
+	_group = _this select 0;
+	_position =_this select 1;
+	_hasCargo = _this select 2;
+
+	_wp = _group addWaypoint [_position, 0];
+	_wp setWaypointType "MOVE";
+	_wp setWaypointSpeed "FAST";
+
+	if(_hasCargo) then { _wp setWaypointType "Unload"; };
+};
+
+BTC_fnc_AddUnitsToCargo = {
+	_vehicle = _this select 0;
+	_faction = _this select 1;
+
+	_emptyPosCargo = _vehicle emptyPositions "Cargo";
+	_groups = floor(_emptyPosCargo / 2);
+	_type = RHS_RU_UNITS_TYPES call BTC_fnc_GetRandomOccurrenceFromArray;
+
+	_unitGroup = [_groups, _emptyPosCargo, _faction, _type, [_vehicle], 1] call BTC_fnc_CreateGroupsOfRandomUnits;
+	
+	{
+		_x assignAsCargo _vehicle;
+		_x moveInCargo _vehicle;
+	} forEach _unitGroup;
+};
