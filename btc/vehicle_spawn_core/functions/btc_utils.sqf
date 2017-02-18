@@ -41,18 +41,17 @@ BTC_fnc_IsUnitPresentInGroup = {
 	_isPresent = className _unit in _groupClassNames;
 
 	_isPresent;
-}
+};
 
 BTC_fnc_GetSideFromFaction = {
 	_faction = _this select 0;
 	_side = east;
 	
-	switch(_faction) do {
-		case RHS_RU_FACTION_VDV:  	{ _side = east };
-		case RHS_RU_FACTION_VMF: 	{ _side = east };
-		case RHS_RU_FACTION_VV: 	{ _side = east };
-		case RHS_RU_FACTION_MSV: 	{ _side = east };
-	};
+	{
+		_factionRel = _x select 0;
+		_sideRel = _x select 1;
+		if(_faction == _faction ) then { _side = _sideRel; };
+	} forEach RHS_FACTIONS_SIDE;
 	_side;
 };
 
@@ -111,14 +110,14 @@ BTC_fnc_GetHousesInRadius = {
 
 	_buildings = nearestObjects [_pos, ["Building"], _radius];
 
-	_useful    = [];
+	_useful = [];
 	{ 
-		if (format["%1", _x buildingPos 2] != "[0,0,0]" && {damage _x == 0}}) then
+		if (format["%1", _x buildingPos 2] != "[0,0,0]" && {damage _x == 0}) then
 		{ 
 			_useful set [count _useful, _x]; 
 		}; 
 	} forEach _buildings; 
-	_useful	
+	_useful;
 };
 
 BTC_fnc_GetUsefulPositionInHouse = {
@@ -178,4 +177,3 @@ BTC_fnc_AddUnitsToCargo = {
 		_x moveInCargo _vehicle;
 	} forEach _unitGroup;
 };
-
